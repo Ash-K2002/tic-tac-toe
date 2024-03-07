@@ -3,6 +3,7 @@ function grid(size)
 {
 // stores played moves
 let playedArr=[];
+let locked=false;
 
 //generates a grid
 function gridGen()
@@ -27,7 +28,7 @@ const getGrid= ()=>arr;
 // play your chance at [row, col]
 const play=(val,row,col)=>{
     console.log();
-    if(playedArr.includes(`${row}${col}`))
+    if(played(row,col))
      {return false;}
 else {
     playedArr.push(`${row}${col}`);
@@ -36,10 +37,13 @@ else {
 }
 };
 
+//checks if a move has been played
+const played=(row,col)=>{
+return playedArr.includes(`${row}${col}`);
+}
+
 // checks if won or draw
 const won = ()=>{
-    if(playedArr.length==size**2)
-    return -2;
     let rowInitial=0,colInitial=0;
     let rowflag=false, colflag=false;
     //check for each column
@@ -58,7 +62,7 @@ const won = ()=>{
                 break;
             }
         }
-        if(colflag)
+        if(colflag && colInitial!=0)
         return colInitial;
     }
     
@@ -76,7 +80,7 @@ const won = ()=>{
                 break;
             }
         }
-        if(rowflag)
+        if(rowflag && rowInitial!=0)
         return rowInitial;
     }
 
@@ -94,15 +98,16 @@ const won = ()=>{
         diagflag2=false;
         }
     }
-    if(diagflag1)
+    if(diagflag1 && arr[0][0]!=0)
     return arr[0][0];
-    if(diagflag2)
+    if(diagflag2 && arr[0][size-1]!=0)
     return arr[0][size-1];
-
+    if(playedArr.length==size**2)
+    return -2;
     return -1;
 }
 
-return {getGrid,play,won,playedArr};
+return {getGrid,play,won,played,locked};
 }
 
 // creates a player profile
@@ -116,5 +121,74 @@ function createPlayer(name='', sign=0){
     return {name,sign,win,playerScore};
 }
 
+//
+let currPlayer=true;
+
 
 // gui operations start
+const player1= createPlayer('player1',1);
+const player2=createPlayer('player2',2);
+const grid3= grid(3);
+
+const container= document.querySelector('#container');
+const result= document.querySelector('#result');
+
+function generateGuiGrid(size){
+    for(let i=0;i<size;i++)
+    { const row=document.createElement('div');
+        row.className='cont-row';
+        for(let j=0;j<size;j++)
+        {
+            const item= document.createElement('div');
+            item.className='item';
+            item.setAttribute('data-index',`${i},${j}`);
+
+            item.addEventListener('click',()=>{
+            // finding index of the element 
+            if(!grid3.locked){
+                const indexarr= item.getAttribute('data-index').split(',');
+                console.log(indexarr);
+
+            // only runs if the field is unmarked
+            if(!grid3.played(+indexarr[0],+indexarr[1])){
+                if(currPlayer)
+                { 
+                  item.textContent='X';
+                  grid3.play(player1.sign,+indexarr[0],+indexarr[1]);
+                }
+                else{
+                    item.textContent='O';
+                    grid3.play(player2.sign, +indexarr[0],+indexarr[1]);
+                }
+                currPlayer=!currPlayer;
+            }
+
+            if(grid3.won()!=-1)
+            { // lock the grid to not play further on winning or draw
+                grid3.locked=true;
+                switch (grid3.won()) {
+                    case 1:
+                        result.textContent='player 1 has won';
+                        break;
+                    case 2: 
+                        result.textContent='player 2 has won';
+                        break;
+                    default:
+                        result.textContent='game draw';
+                        break;
+                }
+
+            }
+            }
+
+            }
+            );
+        
+            row.appendChild(item);
+        }
+        container.appendChild(row);
+    }
+}
+
+
+generateGuiGrid(3);

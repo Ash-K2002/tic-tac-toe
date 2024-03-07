@@ -1,0 +1,10 @@
+.item{
+    background-color: azure;
+    border: 1px solid;
+    height: 4em;
+    width: 4em;
+}
+
+.cont-row{
+    display: flex;
+}
