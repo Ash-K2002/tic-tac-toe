@@ -1,10 +1,110 @@
+:root{
+    --th1-col1:#adc3e8;
+    --th1-col2: #0d132a;
+
+    --th2-col1: #b0b0b0;
+    --th2-col2: #2e253d;
+
+    --th3-col1: #cdb27b;
+    --th3-col2: #8b7d73;
+    --th3-col3: #3f3d47;
+    --th3-col4: #0c0c0d;
+}
+body{
+    color: var(--th3-col4);
+    background-color: var(--th3-col2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    gap: 2em;
+}
+
+#scorecard{
+    margin-left: 2em;
+    margin-top: 2em;
+    flex-grow: 2;
+    align-self: flex-start;
+    font-size: 2em;
+}
+
+#game{
+    display: grid;
+    grid-template-columns:1fr 5fr 1fr;
+    justify-content: center;
+    width: 100vw;
+}
+
+#result{
+    justify-self: center;
+    padding: 0 2em;
+}
+#container{
+    justify-self: center;
+    width: 600px;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+#controls{
+    display: flex;
+    gap: 5em;
+}
 .item{
-    background-color: azure;
-    border: 1px solid;
-    height: 4em;
-    width: 4em;
+    background-color: var(--th3-col4);
+    border: 2px solid var(--th3-col2);
+    color: var(--th3-col2);
+    width: 100%;
+    aspect-ratio: 1/1;
+    font-size: 500%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+ul{
+    list-style-type: none;
 }
 
 .cont-row{
     display: flex;
+    flex-grow: 1;
+}
+button{
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    padding: 0.5em;
+    background-color: var(--th3-col3);
+    color: #cdb27b;
+}
+
+.button1{
+background-color: var(--th3-col3);
+color: var(--th3-col1);
+}
+
+.button2{
+background-color: var(--th3-col4);
+color: var(--th3-col1);
+}
+
+input[type=range]{
+    appearance: none;
+    width: 100%;
+    background: var(--th3-col3);
+}
+input[type=range]::-webkit-slider-thumb{
+    appearance: none;
+    border: 1px solid var(--th3-col1);
+    height: 36px;
+    width: 16px;
+    background: #cdb27b;
+}
+input[type=range]::ms-track{
+    width: 100%;
+    cursor: pointer;
 }

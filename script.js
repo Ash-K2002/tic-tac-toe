@@ -1,9 +1,8 @@
 // handles all grid operations 
 function grid(size)
 {
-// stores played moves
-let playedArr=[];
-let locked=false;
+let playedArr=[];// stores played moves 
+let locked=false;// checks if the grid has been locked
 
 //generates a grid
 function gridGen()
@@ -20,7 +19,7 @@ return arr;
 }
 
 // created the array 
-const arr=gridGen();
+let arr=gridGen();
 
 // prints the array 
 const getGrid= ()=>arr;
@@ -107,7 +106,7 @@ const won = ()=>{
     return -1;
 }
 
-return {getGrid,play,won,played,locked};
+return {getGrid,play,won,played,locked,reset,playedArr};
 }
 
 // creates a player profile
@@ -128,10 +127,10 @@ let currPlayer=true;
 // gui operations start
 const player1= createPlayer('player1',1);
 const player2=createPlayer('player2',2);
-const grid3= grid(3);
+let size=3;
+let grid3= grid(size);
 
 const container= document.querySelector('#container');
-const result= document.querySelector('#result');
 
 function generateGuiGrid(size){
     for(let i=0;i<size;i++)
@@ -144,8 +143,10 @@ function generateGuiGrid(size){
             item.setAttribute('data-index',`${i},${j}`);
 
             item.addEventListener('click',()=>{
-            // finding index of the element 
-            if(!grid3.locked){
+            // if grid3 is locked, return the process
+            if(grid3.locked)
+            {return;}
+
                 const indexarr= item.getAttribute('data-index').split(',');
                 console.log(indexarr);
 
@@ -162,33 +163,64 @@ function generateGuiGrid(size){
                 }
                 currPlayer=!currPlayer;
             }
+            showRes(grid3);
+            });
 
-            if(grid3.won()!=-1)
-            { // lock the grid to not play further on winning or draw
-                grid3.locked=true;
-                switch (grid3.won()) {
-                    case 1:
-                        result.textContent='player 1 has won';
-                        break;
-                    case 2: 
-                        result.textContent='player 2 has won';
-                        break;
-                    default:
-                        result.textContent='game draw';
-                        break;
-                }
-
-            }
-            }
-
-            }
-            );
-        
             row.appendChild(item);
         }
         container.appendChild(row);
     }
 }
 
+function showRes(grd=grid())
+{
+if(grd.won()!=-1)
+            { // lock the grid to not play further on winning or draw
+                grd.locked=true;
+                const result=document.createElement('li');
+                
+            // then display the result
+                switch (grd.won()) {
+                    case 1:
+                        result.textContent='player 1 won';
+                        player1.win();
+                        break;
+                    case 2: 
+                        result.textContent+='player 2 won';
+                        player2.win();
+                        break;
+                    default:
+                        result.textContent+='game draw';
+                        break;
+                }
+                document.querySelector('#result > ul').appendChild(result);
+                document.querySelector('#plr1-scr').textContent=player1.playerScore();
+                document.querySelector('#plr2-scr').textContent=player2.playerScore();
+                document.getElementById('reset').setAttribute('class','button2');
+            }
+}
 
-generateGuiGrid(3);
+document.querySelector('#reset').addEventListener('click',()=>{
+    currPlayer=true;
+    container.textContent='';
+    generateGuiGrid(size);
+    grid3=grid(size);
+    document.getElementById('reset').setAttribute('class','button1');
+});
+
+const slider = document.querySelector('#slider-size');
+const output= document.querySelector('#slider-val');
+output.textContent=slider.value;
+slider.addEventListener('input',()=>{
+output.textContent=slider.value;
+});
+
+document.querySelector('#create-grd').addEventListener('click',()=>{
+    size=+slider.value;
+    container.textContent='';
+    generateGuiGrid(size);
+    grid3=grid(size);
+    currPlayer=true;
+
+});
+generateGuiGrid(size);

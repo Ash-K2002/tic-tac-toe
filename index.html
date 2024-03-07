@@ -5,12 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
 </head>
 <body>
-    <div id="container"></div>
-    <div id="result">
+    
+    <div id="game">
+        <div id="scorecard">
+            <div>X:<span id="plr1-scr">0</span></div>
+            <div>O:<span id="plr2-scr">0</O:span></div>
+        </div>
+        <div id="container"></div>
+        <div id="result">
+            <h2>Result:</h2>
+            <ul></ul>
+        </div>
+    </div>
+    <div id="controls">
+        <button id="reset" class="button1">Another round</button>
+        <div>
+        <input type="range" name="slider-size" id="slider-size" min="3" max="5" value="3">
+        <div>Size: <output id="slider-val"></output></div>
+        <button id="create-grd">create new</button>
+        </div>
         
     </div>
+    
+
     
     <script src="script.js"></script>
 </body>
